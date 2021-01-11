@@ -39,16 +39,18 @@ describe Oystercard do
   end
 
   describe '#tap_in' do
+    let(:station) { Station.new }
     it { is_expected.to respond_to :tap_in }
 
     it 'will return true when an oystercard with a sufficient balance tapped in' do
       subject.top_up(Oystercard::MIN_AMOUNT)
-      expect(subject.tap_in).to eq true
+      expect(subject.tap_in(station)).to eq true
     end
 
     it 'will return an error if the balance is under 1' do
-      expect { subject.tap_in }.to raise_error('Insufficient balance on card.')
+      expect { subject.tap_in(station) }.to raise_error('Insufficient balance on card.')
     end
+
   end
 
   describe '#tap_out' do
@@ -61,7 +63,7 @@ describe Oystercard do
 
     it 'will deduct the minimum fare from the balance on tapping out' do
       subject.top_up(10)
-      subject.tap_in
+      subject.tap_in(Station.new)
       expect { subject.tap_out }.to change { subject.balance }.by(- Oystercard::MIN_FARE)
     end
   end
@@ -71,7 +73,7 @@ describe Oystercard do
 
     it 'will return true if an oystercard with a sufficient balance is in use in a journey' do
       subject.top_up(Oystercard::MIN_AMOUNT)
-      subject.tap_in
+      subject.tap_in(Station.new)
       expect(subject.in_journey?).to eq true
     end
   end

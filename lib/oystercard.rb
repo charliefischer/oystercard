@@ -1,7 +1,8 @@
-# frozen_string_literal: true
+require 'station'
 
 class Oystercard
   attr_reader :balance, :in_journey
+  attr_accessor :station
 
   MAX_AMOUNT = 90
   MIN_AMOUNT = 1
@@ -10,6 +11,7 @@ class Oystercard
   def initialize
     @balance = 0
     @in_journey = false
+    @station = nil
   end
 
   def top_up(amount)
@@ -18,9 +20,10 @@ class Oystercard
     @balance += amount
   end
 
-  def tap_in
+  def tap_in(station)
     raise 'Insufficient balance on card.' if @balance < MIN_AMOUNT
 
+    @station = station
     @in_journey = true
   end
 
