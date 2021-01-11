@@ -37,8 +37,25 @@ describe Oystercard do
   describe '#tap_in' do
     it { is_expected.to respond_to :tap_in }
 
-    it 'is expected to recognise that it has been tapped in' do
-      expect(subject.tap_in).to eq 'tapped in'
+    it 'will return true when tapped in' do
+      expect(subject.tap_in).to eq true
     end
   end
+
+  describe '#tap_out' do
+    it { is_expected.to respond_to :tap_out }
+
+    it 'will return false when tapped out' do
+      expect(subject.tap_out).to eq false
+    end
+  end
+
+  describe '#in_journey?' do
+    it { is_expected.to respond_to :in_journey? }
+
+    it 'will return true if card is in use in a journey' do
+      subject.tap_in
+      expect(subject.in_journey?).to eq true
+    end
+  end 
 end

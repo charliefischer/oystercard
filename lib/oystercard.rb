@@ -7,7 +7,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @status = 'tapped_out'
+    @status = false
   end
 
   def top_up(amount)
@@ -21,6 +21,14 @@ class Oystercard
   end
 
   def tap_in
-    @status = 'tapped in'
+    @status = true
   end
+
+  def tap_out
+    @status = false
+  end
+
+  def in_journey?
+    @status
+  end 
 end
