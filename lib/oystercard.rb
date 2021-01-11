@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class Oystercard
-  attr_reader :balance, :status
+  attr_reader :balance, :in_journey
 
   MAX_AMOUNT = 90
   MIN_AMOUNT = 1
+  MIN_FARE = 1
 
   def initialize
     @balance = 0
-    @status = false
+    @in_journey = false
   end
 
   def top_up(amount)
@@ -17,20 +18,24 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def tap_in
-    fail "Insufficient balance on card." if @balance < MIN_AMOUNT
-    @status = true
+    raise 'Insufficient balance on card.' if @balance < MIN_AMOUNT
+
+    @in_journey = true
   end
 
-  def tap_out
-    @status = false
+  def tap_out(amount = MIN_FARE)
+    @in_journey = false
+    deduct(amount)
   end
 
   def in_journey?
-    @status
+    @in_journey
+  end
+
+  private
+
+  def deduct(amount)
+    @balance -= amount
   end
 end

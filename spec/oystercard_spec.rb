@@ -28,11 +28,13 @@ describe Oystercard do
   end
 
   describe '#deduct' do
-    it { is_expected.to respond_to :deduct }
+    it 'is expected to respond to deduct' do
+      expect(respond_to subject.send(:deduct, 5))
+    end
 
     it 'is expected to reduce the balance by the specified sum' do
       subject.top_up(Oystercard::MAX_AMOUNT)
-      expect(subject.deduct(5)).to eq 85
+      expect(subject.send(:deduct, 5)).to eq 85
     end
   end
 
@@ -45,7 +47,7 @@ describe Oystercard do
     end
 
     it 'will return an error if the balance is under 1' do
-      expect { subject.tap_in }.to raise_error("Insufficient balance on card.")
+      expect { subject.tap_in }.to raise_error('Insufficient balance on card.')
     end
   end
 
@@ -53,7 +55,14 @@ describe Oystercard do
     it { is_expected.to respond_to :tap_out }
 
     it 'will return false when tapped out' do
-      expect(subject.tap_out).to eq false
+      subject.tap_out
+      expect(subject.in_journey).to eq false
+    end
+
+    it 'will deduct the minimum fare from the balance on tapping out' do
+      subject.top_up(10)
+      subject.tap_in
+      expect { subject.tap_out }.to change { subject.balance }.by(- Oystercard::MIN_FARE)
     end
   end
 
