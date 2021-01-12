@@ -27,9 +27,9 @@ class Oystercard
     @in_journey = true
   end
 
-  def tap_out(amount = MIN_FARE)
+  def tap_out
     @in_journey = false
-    deduct(amount)
+    deduct(MIN_FARE)
   end
 
   def in_journey?
